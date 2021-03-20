@@ -16,14 +16,13 @@ const pressKeyHandler = (e) => {
 
   if(e.repeat) return;
 
-  if (item.classList.contains('piano-key')) {
-    item.classList.add(`${PIANO_KEY_ACTIVE}`);
-    item.classList.add(`${PIANO_PSEUDO_KEY_ACTIVE}`);
-    playSound(item);
-    
-    document.addEventListener('mouseover', aboveKeyHandler);
-    document.addEventListener('mouseout', leaveFromKey);
+  if (item) {
+    classAndMusicToggle(item, 'add');
+  } else if (e) {
+    classAndMusicToggle(e, 'add');
   }
+  document.addEventListener('mouseover', aboveKeyHandler);
+  document.addEventListener('mouseout', leaveFromKey);
 }
 
 const leaveFromKeyHandler = (e) => {
@@ -31,9 +30,10 @@ const leaveFromKeyHandler = (e) => {
 
   if(e.repeat) return;
 
-  if (item.classList.contains('piano-key')) {
-    item.classList.remove(`${PIANO_KEY_ACTIVE}`);
-    item.classList.remove(`${PIANO_PSEUDO_KEY_ACTIVE}`);
+  if (item) {
+    classAndMusicToggle(item, 'remove');
+  } else if (e) {
+    classAndMusicToggle(e, 'remove');
   }
   
   document.removeEventListener('mouseover', aboveKeyHandler);
@@ -59,5 +59,44 @@ const leaveFromKey = (e) => {
   }
 }
 
+const keyPressed = (e) => {
+  if(e.repeat) return;
+
+  const pianoKey = PIANO_KEYS
+    .find((el) => el.dataset.letter === e.code.replace(/Key/g, ''));
+  
+  if (pianoKey) {
+    pressKeyHandler(pianoKey);
+  }
+}
+
+const classAndMusicToggle = (elem, act) => {
+  if (elem) {
+    if (elem.classList.contains('piano-key')) {
+      if (act === 'add') {
+        elem.classList.add(`${PIANO_KEY_ACTIVE}`);
+        elem.classList.add(`${PIANO_PSEUDO_KEY_ACTIVE}`);
+        playSound(elem);
+      } else if (act === 'remove') {
+        elem.classList.remove(`${PIANO_KEY_ACTIVE}`);
+        elem.classList.remove(`${PIANO_PSEUDO_KEY_ACTIVE}`);
+      }
+    }
+  }
+}
+
+const keyUnPressed = (e) => {
+  if(e.repeat) return;
+
+  const pianoKey = PIANO_KEYS
+    .find((el) => el.dataset.letter === e.code.replace(/Key/g, ''));
+  
+  if (pianoKey) {
+    leaveFromKeyHandler(pianoKey);
+  }
+}
+
 document.addEventListener('mousedown', pressKeyHandler);
 document.addEventListener('mouseup', leaveFromKeyHandler);
+document.addEventListener('keydown', keyPressed);
+document.addEventListener('keyup', keyUnPressed);
