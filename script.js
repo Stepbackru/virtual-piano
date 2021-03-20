@@ -20,9 +20,12 @@ const pressKeyHandler = (e) => {
     item.classList.add(`${PIANO_KEY_ACTIVE}`);
     item.classList.add(`${PIANO_PSEUDO_KEY_ACTIVE}`);
     playSound(item);
+    
+    document.addEventListener('mouseover', aboveKeyHandler);
+    document.addEventListener('mouseout', leaveFromKey);
   }
-
 }
+
 const leaveFromKeyHandler = (e) => {
   const item = e.target;
 
@@ -32,7 +35,28 @@ const leaveFromKeyHandler = (e) => {
     item.classList.remove(`${PIANO_KEY_ACTIVE}`);
     item.classList.remove(`${PIANO_PSEUDO_KEY_ACTIVE}`);
   }
+  
+  document.removeEventListener('mouseover', aboveKeyHandler);
+  document.removeEventListener('mouseout', leaveFromKey);
+}
 
+const aboveKeyHandler = (e) => {
+  const item = e.target;
+
+  if (item.classList.contains('piano-key')) {
+    item.classList.add(`${PIANO_KEY_ACTIVE}`);
+    item.classList.add(`${PIANO_PSEUDO_KEY_ACTIVE}`);
+    playSound(item);
+  }
+}
+
+const leaveFromKey = (e) => {
+  const item = e.target;
+
+  if (item.classList.contains('piano-key')) {
+    item.classList.remove(`${PIANO_KEY_ACTIVE}`);
+    item.classList.remove(`${PIANO_PSEUDO_KEY_ACTIVE}`);
+  }
 }
 
 document.addEventListener('mousedown', pressKeyHandler);
