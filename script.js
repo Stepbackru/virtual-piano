@@ -1,6 +1,8 @@
 const PIANO = document.querySelector('.piano');
 const PIANO_KEYS = [...document.querySelectorAll('.piano-key')];
 const FULLSCREEN_BUTTON = document.querySelector('.openfullscreen');
+const BUTTON_CONTAINER = document.querySelector('.btn-container');
+const BUTTONS = [...document.querySelectorAll('.btn')];
 const PIANO_KEY_ACTIVE = 'piano-key-active';
 const PIANO_PSEUDO_KEY_ACTIVE = 'piano-key-active-pseudo';
 
@@ -101,7 +103,7 @@ const activateFullScreen = () => {
   else if (document.documentElement.msRequestFullscreen) {
       document.documentElement.msRequestFullscreen();
   }
-};
+}
 
 const deactivateFullScreen = () => {
   if (document.exitFullscreen) {
@@ -111,7 +113,26 @@ const deactivateFullScreen = () => {
   } else if (document.webkitExitFullscreen) {
       document.webkitExitFullscreen();
   }
-};
+}
+
+const buttonsHandler = (e) => {
+  const item = e.target;
+
+  if (item.classList.contains('btn')) {
+    BUTTONS.forEach(el => el.classList.remove('btn-active'));
+    item.classList.add('btn-active');
+  }
+
+  if (item.classList.contains('btn-letters')) {
+    PIANO_KEYS.forEach(el => {
+      el.classList.add('piano-key-letter');
+    });
+  } else if (item.classList.contains('btn-notes')) {
+    PIANO_KEYS.forEach(el => {
+      el.classList.remove('piano-key-letter');
+    });
+  }
+}
 
 document.addEventListener('mousedown', pressKeyHandler);
 document.addEventListener('mouseup', leaveFromKeyHandler);
@@ -120,3 +141,4 @@ document.addEventListener('keyup', keyUnPressed);
 FULLSCREEN_BUTTON.addEventListener('click', () => {
   document.fullscreenElement ? deactivateFullScreen(): activateFullScreen();
 })
+BUTTON_CONTAINER.addEventListener('click', buttonsHandler);
