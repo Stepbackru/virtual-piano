@@ -1,5 +1,6 @@
 const PIANO = document.querySelector('.piano');
 const PIANO_KEYS = [...document.querySelectorAll('.piano-key')];
+const FULLSCREEN_BUTTON = document.querySelector('.openfullscreen');
 const PIANO_KEY_ACTIVE = 'piano-key-active';
 const PIANO_PSEUDO_KEY_ACTIVE = 'piano-key-active-pseudo';
 
@@ -42,21 +43,12 @@ const leaveFromKeyHandler = (e) => {
 
 const aboveKeyHandler = (e) => {
   const item = e.target;
-
-  if (item.classList.contains('piano-key')) {
-    item.classList.add(`${PIANO_KEY_ACTIVE}`);
-    item.classList.add(`${PIANO_PSEUDO_KEY_ACTIVE}`);
-    playSound(item);
-  }
+  classAndMusicToggle(item, 'add');
 }
 
 const leaveFromKey = (e) => {
   const item = e.target;
-
-  if (item.classList.contains('piano-key')) {
-    item.classList.remove(`${PIANO_KEY_ACTIVE}`);
-    item.classList.remove(`${PIANO_PSEUDO_KEY_ACTIVE}`);
-  }
+  classAndMusicToggle(item, 'remove');
 }
 
 const keyPressed = (e) => {
@@ -96,7 +88,35 @@ const keyUnPressed = (e) => {
   }
 }
 
+const activateFullScreen = () => {
+  if(document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+  }
+  else if (document.documentElement.mozRequestFullScreen) {
+      document.documentElement.mozRequestFullScreen();
+  }
+  else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen();
+  }
+  else if (document.documentElement.msRequestFullscreen) {
+      document.documentElement.msRequestFullscreen();
+  }
+};
+
+const deactivateFullScreen = () => {
+  if (document.exitFullscreen) {
+      document.exitFullscreen();
+  } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+  } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+  }
+};
+
 document.addEventListener('mousedown', pressKeyHandler);
 document.addEventListener('mouseup', leaveFromKeyHandler);
 document.addEventListener('keydown', keyPressed);
 document.addEventListener('keyup', keyUnPressed);
+FULLSCREEN_BUTTON.addEventListener('click', () => {
+  document.fullscreenElement ? deactivateFullScreen(): activateFullScreen();
+})
