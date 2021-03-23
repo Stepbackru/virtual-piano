@@ -134,7 +134,7 @@ const buttonsHandler = (e) => {
   }
 }
 
-document.addEventListener('mousedown', pressKeyHandler);
+PIANO.addEventListener('mousedown', pressKeyHandler);
 document.addEventListener('mouseup', leaveFromKeyHandler);
 document.addEventListener('keydown', keyPressed);
 document.addEventListener('keyup', keyUnPressed);
